@@ -156,6 +156,7 @@
     className: 'spinner', // CSS class to assign to the element
     top: 'auto',          // center vertically
     left: 'auto',         // center horizontally
+    unit: 'px',           // unit can be px or %
     position: 'relative'  // element position
   }
 
@@ -184,15 +185,22 @@
         , mid = o.radius+o.length+o.width
         , ep // element position
         , tp // target position
+        , position_left
+        , position_top
 
       if (target) {
         target.insertBefore(el, target.firstChild||null)
         tp = pos(target)
         ep = pos(el)
-        css(el, {
-          left: (o.left == 'auto' ? tp.x-ep.x + (target.offsetWidth >> 1) : parseInt(o.left, 10) + mid) + 'px',
-          top: (o.top == 'auto' ? tp.y-ep.y + (target.offsetHeight >> 1) : parseInt(o.top, 10) + mid)  + 'px'
-        })
+        if(o.unit == '%') {
+          position_left = (o.left == 'auto' ? '50' : parseInt(o.left, 10) + mid) + '%'
+          position_top = (o.top == 'auto' ? '50' : parseInt(o.top, 10) + mid) + '%'
+        }
+        else {
+          position_left = (o.left == 'auto' ? tp.x-ep.x + (target.offsetWidth >> 1) : parseInt(o.left, 10) + mid) + 'px'
+          position_top = (o.top == 'auto' ? tp.y-ep.y + (target.offsetHeight >> 1) : parseInt(o.top, 10) + mid)  + 'px'
+        }
+        css(el, { left: position_left, top: position_top })
       }
 
       el.setAttribute('role', 'progressbar')
